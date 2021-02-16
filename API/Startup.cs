@@ -39,6 +39,15 @@ namespace API
 
              
             services.AddDbContext<DataContext>(options => options.UseSqlite(_config.GetConnectionString("DefaultConnection")));
+
+            // CORS Config
+            services.AddCors(options => 
+            {
+                options.AddPolicy("CorsPolicy", policy => 
+                {
+                    policy.AllowAnyMethod().AllowAnyHeader().AllowAnyOrigin();
+                });
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline (middleware).
@@ -53,6 +62,8 @@ namespace API
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseCors("CorsPolicy");
 
             app.UseAuthorization();
 
