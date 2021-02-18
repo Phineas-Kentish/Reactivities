@@ -20,7 +20,9 @@ namespace API.Extensions
             });
 
             // Database connection
-            services.AddDbContext<DataContext>(options => options.UseSqlite(config.GetConnectionString("DefaultConnection")));
+            services.AddDbContext<DataContext>(options => 
+                options.UseSqlite(config.GetConnectionString("DefaultConnection"))
+            );
             
             // CORS Config
             services.AddCors(options => 
@@ -32,6 +34,7 @@ namespace API.Extensions
             });
 
             services.AddMediatR(typeof(List.Handler).Assembly);
+            
             services.AddAutoMapper(typeof(MappingProfiles).Assembly);
 
             return services;
