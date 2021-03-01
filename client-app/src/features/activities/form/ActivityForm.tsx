@@ -34,12 +34,16 @@ export default observer(function ActivityForm() {
         if (id) loadActivity(id).then(activity => setActivity(activity!))
     }, [id, loadActivity])
 
+    // Yup is lightweight and simply allows us to make validation
+    // schema's which integrate cleanly into Formik forms, 
+    // just make sure your field names match up!
+    
     const validationShema = Yup.object({
         title: Yup.string().required("The activity title is required"),
         description: Yup.string().required("The activity description is required"),
         category: Yup.string().required(),
         date: Yup.string().required("Date is required").nullable(),
-        city: Yup.string().required(),
+        citys: Yup.string().required(),
         venue: Yup.string().required(),
     })
 
@@ -62,7 +66,7 @@ export default observer(function ActivityForm() {
         <Segment clearing>
             <Header content="Activity Details" sub color="teal" />
             <Formik 
-                validationSchema={validationShema}
+                validationSchema={validationShema} // This accepts Yup.object({}) as argument
                 enableReinitialize 
                 initialValues={activity} 
                 onSubmit={values => handleFormSubmit(values)}>
@@ -71,7 +75,7 @@ export default observer(function ActivityForm() {
                         <MyTextInput name="title" placeholder="Title" />                    
                         <MyTextArea name="description" placeholder="Description" rows={4} />
                         <MySelectInput name="category" placeholder="Category" options={categoryOptions} />
-                        <MyDateInput 
+                        <MyDateInput                            
                             name="date" 
                             placeholderText="Date" 
                             showTimeSelect

@@ -2,7 +2,8 @@ import axios, {AxiosError, AxiosResponse} from 'axios'
 import {Activity} from '../models/activity'
 import {toast} from 'react-toastify'
 import { history } from '../..'
-import { store } from './stores/Store'
+import { store } from './stores/Store' 
+import { User, UserFormValues } from '../models/user'
 
 const sleep = (delay: number) => {
     return new Promise((resolve) => {
@@ -12,8 +13,14 @@ const sleep = (delay: number) => {
 
 axios.defaults.baseURL = "http://localhost:5000/api"
 
+// Add JWT header 
+axios.interceptors.request.use(config => {
+    const token = store.commonStore.token
+    if (token) config.headers.Authorization = `Bearer ${token}`
+    return config
+})
+
 axios.interceptors.response.use(async response => {    
-    await sleep(1000)
     return response
 }, (error: AxiosError) => {
     const {data, status, config} = error.response!
@@ -62,6 +69,7 @@ const requests = {
     del: <T> (url: string) => axios.delete<T>(url).then(responseBody),    
 }
 
+// Requests for Activities
 const Activities = {
     list: () => requests.get<Activity[]>("/activities"),
     details: (id: string) => requests.get<Activity>(`/activities/${id}`),
@@ -70,8 +78,16 @@ const Activities = {
     delete: (id: string) => axios.delete(`/activities/${id}`),
 }
 
+// Requests for Authentication
+const Account = {
+    current: () => requests.get<User>("/account"),
+    login: (user: UserFormValues) => requests.post<User>("account/login", user),
+    register: (user: UserFormValues) => requests.post<User>("account/register", user)
+}
+
 const agent = {
-    Activities
+    Activities,
+    Account
 }
 
 export default agent

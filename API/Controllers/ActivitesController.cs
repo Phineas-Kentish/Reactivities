@@ -4,17 +4,20 @@ using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using Application.Activities;
 using Domain;
+using Microsoft.AspNetCore.Authorization;
 
 namespace API.Controllers
 {
     public class ActivitiesController : BaseApiController
     {
+        [AllowAnonymous]
+        
         [HttpGet] // Get all
         public async Task <IActionResult> GetActivites()
         {                        
             return HandleResult(await Mediator.Send(new List.Query()));
         }
-
+        
         [HttpGet("{id}")] // Get one
         public async Task <IActionResult> GetActivity(Guid id)
         {            

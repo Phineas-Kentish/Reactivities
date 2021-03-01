@@ -2,7 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Domain;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Internal;
 using Microsoft.Extensions.Configuration;
@@ -25,8 +27,9 @@ namespace API
             try {
                 // Use the DataContext service to run a migration
                 var context = services.GetRequiredService<DataContext>();
+                var userManager = services.GetRequiredService<UserManager<AppUser>>();
                 await context.Database.MigrateAsync();
-                await Seed.SeedData(context);
+                await Seed.SeedData(context, userManager);
             } catch (Exception ex) {
                 // If migration fails then log the error
                 var logger = services.GetRequiredService<ILogger<Program>>();
