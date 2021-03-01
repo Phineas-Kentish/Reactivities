@@ -6,6 +6,8 @@ using Persistence;
 using Application.Activities;
 using MediatR;
 using Application.Core;
+using Application.Interfaces;
+using Infastructure.Security;
 
 namespace API.Extensions
 {
@@ -33,9 +35,12 @@ namespace API.Extensions
                 });
             });
 
-            services.AddMediatR(typeof(List.Handler).Assembly);
-            
+            services.AddMediatR(typeof(List.Handler).Assembly);            
             services.AddAutoMapper(typeof(MappingProfiles).Assembly);
+
+            // This allows us to access the username of the current             
+            // user from anywhere in the application
+            services.AddScoped<IUserAccessor, UserAccessor>();
 
             return services;
         }

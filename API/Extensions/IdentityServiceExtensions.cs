@@ -7,6 +7,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Persistence;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using Infastructure.Security;
+using Microsoft.AspNetCore.Authorization;
 
 namespace API.Extensions
 {
@@ -39,7 +41,15 @@ namespace API.Extensions
                         ValidateAudience = false,
                     };
                 });
-            
+            services.AddAuthorization(opt => 
+            {
+                opt.AddPolicy("IsActivityHost", policy => 
+                {
+                    policy.Requirements.Add(new IsHostRequirement());
+                });
+            });
+            services.AddTransient<IAuthorizationHandler, IsHostRequirementHandler>();
+
             services.AddScoped<TokenService>();
 
             return services;
