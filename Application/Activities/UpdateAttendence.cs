@@ -58,7 +58,7 @@ namespace Application.Activities
                     // If existing relationship and relation is 
                     // host, then toggle cancel, otherwise
                     // remove the relationship
-                    if (hostUsername != user.UserName) {
+                    if (hostUsername == user.UserName) {
                         activity.IsCancelled = !activity.IsCancelled;
                     } else {
                         activity.Attendees.Remove(attendance);
