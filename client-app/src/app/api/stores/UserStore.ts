@@ -6,6 +6,8 @@ import { store } from "./Store";
 
 export default class UserStore {
     user: User | null = null;
+    fbAccessToken: string | null = null;
+    fbLoading = false
 
     constructor () {
         makeAutoObservable(this)
@@ -54,6 +56,42 @@ export default class UserStore {
             runInAction(() => this.user = user)
         } catch (error) {
             console.log(error)
+        }
+    }
+
+    // Check if user is already logged into facebook
+    getFacebookLoginStatus = async () => {
+        window.FB.getLoginStatus(response => {
+            if (response.status === "connected") {
+                this.fbAccessToken = response.authResponse.accessToken
+            }
+        })
+    }
+
+    facebookLogin = () => {
+        this.fbLoading = true
+        const apiLogin = (accessToken: string) => {
+            agent.Account.fbLogin(accessToken).then(user => {
+                store.commonStore.setToken(user.token)
+                runInAction(() => {
+                    this.user = user
+                    this.fbLoading = false
+                })
+                history.push("activities")                
+            }).catch(error => {
+                console.log(error.response)
+                runInAction(() => this.fbLoading = false)
+            })
+        }
+        if(this.fbAccessToken){
+            apiLogin(this.fbAccessToken)
+        }else{
+            window.FB.login(response => {
+                apiLogin(response.authResponse.accessToken)
+            }, 
+            { // Optional - ask for extra profile data as well as token
+                scope: 'public_profile, email'
+            })
         }
     }
 }

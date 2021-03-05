@@ -1,4 +1,3 @@
-import { Profiler } from "inspector";
 import { Profile } from "./Profile";
 
 export interface Activity {

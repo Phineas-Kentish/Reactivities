@@ -1,5 +1,6 @@
 using System.Linq;
 using Application.Activities;
+using Application.Comments;
 using AutoMapper;
 using Domain;
 
@@ -41,7 +42,17 @@ namespace Application.Core
                 .ForMember(
                     d => d.Bio, 
                     o => o.MapFrom(s => s.AppUser.Bio));
-            
+
+            // Comment DTO to contain Author data
+            CreateMap<Comment, CommentDto>()   
+                .ForMember(
+                    d => d.DisplayName, // Map to
+                    o => o.MapFrom(s => s.Author.DisplayName) // Map from
+                )
+                .ForMember(
+                    d => d.Username, 
+                    o => o.MapFrom(s => s.Author.UserName)
+                );      
         }
     }
 }

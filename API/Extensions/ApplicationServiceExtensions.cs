@@ -22,8 +22,8 @@ namespace API.Extensions
             });
 
             // Database connection
-            services.AddDbContext<DataContext>(options => 
-                options.UseSqlite(config.GetConnectionString("DefaultConnection"))
+            services.AddDbContext<DataContext>(options =>                 
+                options.UseNpgsql(config.GetConnectionString("DefaultConnection"))
             );
             
             // CORS Config
@@ -31,7 +31,12 @@ namespace API.Extensions
             {
                 options.AddPolicy("CorsPolicy", policy => 
                 {
-                    policy.AllowAnyMethod().AllowAnyHeader().AllowAnyOrigin();
+                    policy
+                        .AllowAnyMethod()
+                        .AllowAnyHeader()
+                        .AllowCredentials()
+                        // .AllowAnyOrigin();
+                        .WithOrigins("*://localhost:* https://pages.phintech.co.uk");
                 });
             });
 
@@ -41,6 +46,8 @@ namespace API.Extensions
             // This allows us to access the username of the current             
             // user from anywhere in the application
             services.AddScoped<IUserAccessor, UserAccessor>();
+
+            services.AddSignalR();
 
             return services;
         }

@@ -1,0 +1,17 @@
+version: "3.9"
+services:
+  app:
+    image: phineaskentish/reactivities:latest
+    # build: .
+    ports:
+      - "8080:80"
+    links: 
+      - "db:reactivities_db"
+  db:
+    image: postgres:latest
+    restart: always
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: secret    
+    ports:
+      - "5432:5432"

@@ -1,3 +1,13 @@
+//              ___            ________      ___________              ___ 
+//             /  $$          / $$ $$$ $$    |  $$ $$ $$            /  $$
+//            /  $$$$       /  $$    \  $$   |  $$   \  $$         /  $$$$
+//           /  $$  $$     |  $$      \  $$  |  $$    | $$        /  $$  $$
+//          /  $$    $$    |  $$       | $$  |  $$   /  $$       /  $$    $$
+//         /  $$ $$$$ $$   |  $$       | $$  |  $$ $$ $$        /  $$ $$$$ $$
+//        /  $$_______ $$  |  $$       | $$  |  $$  \  $$      /  $$_______ $$ 
+//       /  $$       \  $$  \  $$     / $$   |  $$   \  $$    /  $$       \  $$
+//      /__$$         \__$$  \__$$ $$$ $$    |__$$    \__$$  /__$$         \__$$
+//
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Router } from 'react-router-dom';
@@ -10,6 +20,7 @@ import './app/layout/style.css';
 import App from './app/layout/App';
 import reportWebVitals from './reportWebVitals';
 import { store, StoreContext } from './app/api/stores/Store';
+import ScrollToTop from './app/layout/ScrollToTop';
 
 // This history object can be used throughout the application
 // so long as you import it from here and also pass it
@@ -18,7 +29,8 @@ export const history = createBrowserHistory()
 
 ReactDOM.render(
     <StoreContext.Provider value={store}>
-        <Router history={history}>
+        <Router history={history}>            
+            <ScrollToTop />
             <App />
         </Router>        
     </StoreContext.Provider>, 

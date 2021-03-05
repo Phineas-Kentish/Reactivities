@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using API.Extensions;
 using API.Middleware;
+using API.SignalR;
 using Application.Activities;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authorization;
@@ -64,6 +65,11 @@ namespace API
 
             app.UseRouting();
 
+            // This will look for index.html inside wwwroot
+            app.UseDefaultFiles();
+            // This will serve the files
+            app.UseStaticFiles();
+
             app.UseCors("CorsPolicy");
 
             // Authentication MUST BE BEFORE Authorization
@@ -72,7 +78,12 @@ namespace API
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllers();
+                // Route for API
+                endpoints.MapControllers();                
+                // Route for serving files 
+                endpoints.MapFallbackToController("Index", "Fallback");
+                // Route for SingalR
+                endpoints.MapHub<ChatHub>("/chat");
             });
         }
     }

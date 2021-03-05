@@ -77,8 +77,7 @@ export default class ActivityStore {
         }
     }
 
-    private setActivity = (activity: Activity) => {
-        console.log(activity)
+    private setActivity = (activity: Activity) => {        
         var user = store.userStore.user
         if (user) {
             activity.isGoing = activity.attendees!.some(
@@ -184,5 +183,9 @@ export default class ActivityStore {
         } finally {
             runInAction(() => this.loading = false)
         }
+    }
+
+    clearSelectedActivity = () => {
+        this.selectedActivity = undefined
     }
 }

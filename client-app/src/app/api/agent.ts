@@ -11,7 +11,7 @@ const sleep = (delay: number) => {
     })
 }
 
-axios.defaults.baseURL = "http://localhost:5000/api"
+axios.defaults.baseURL = process.env.REACT_APP_API_URL
 
 // Add JWT header 
 axios.interceptors.request.use(config => {
@@ -83,7 +83,8 @@ const Activities = {
 const Account = {
     current: () => requests.get<User>("/account"),
     login: (user: UserFormValues) => requests.post<User>("account/login", user),
-    register: (user: UserFormValues) => requests.post<User>("account/register", user)
+    register: (user: UserFormValues) => requests.post<User>("account/register", user),
+    fbLogin: (accessToken: string) => requests.post<User>(`/account/fbLogin?accessToken=${accessToken}`, {}),
 }
 
 const agent = {
